@@ -7,6 +7,9 @@ import { DbConfig } from './common/types/global-config.interface';
 import { BookersModule } from './bookers/bookers.module';
 import { Booker } from './bookers/entities/booker.entity';
 import { AuthModule } from './auth/auth.module';
+import { AuditoriumModule } from './auditorium/auditorium.module';
+import { Auditorium } from './auditorium/entities/auditorium.entity';
+import { Schedule } from './auditorium/entities/schedule.entity';
 
 @Module({
   imports: [
@@ -25,7 +28,7 @@ import { AuthModule } from './auth/auth.module';
           password: database.password,
           port: database.port,
           database: database.database,
-          entities: [Booker],
+          entities: [Booker, Auditorium, Schedule],
           synchronize: true,
         };
       },
@@ -33,6 +36,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     BookersModule,
     AuthModule,
+    AuditoriumModule,
   ],
   controllers: [AppController],
   providers: [],
