@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { AuditoriumModule } from './auditorium/auditorium.module';
 import { Auditorium } from './auditorium/entities/auditorium.entity';
 import { Schedule } from './auditorium/entities/schedule.entity';
+import { BookingsModule } from './bookings/bookings.module';
+import { Booking } from './bookings/entities/booking.entity';
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { Schedule } from './auditorium/entities/schedule.entity';
           password: database.password,
           port: database.port,
           database: database.database,
-          entities: [Booker, Auditorium, Schedule],
+          entities: [Booker, Auditorium, Schedule, Booking],
           synchronize: true,
         };
       },
@@ -37,6 +39,7 @@ import { Schedule } from './auditorium/entities/schedule.entity';
     BookersModule,
     AuthModule,
     AuditoriumModule,
+    BookingsModule,
   ],
   controllers: [AppController],
   providers: [],

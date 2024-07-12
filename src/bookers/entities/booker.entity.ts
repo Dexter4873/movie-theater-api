@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { GenericEntity } from '../../common/generic/generic-entity.entity';
+import { Booking } from '../../bookings/entities/booking.entity';
 
 @Entity()
 export class Booker extends GenericEntity {
@@ -32,4 +33,7 @@ export class Booker extends GenericEntity {
     nullable: true,
   })
   lastname: string;
+
+  @OneToMany(() => Booking, (booking) => booking.booker)
+  bookings: Booking[];
 }
