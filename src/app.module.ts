@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DbConfig } from './common/types/global-config.interface';
 import { BookersModule } from './bookers/bookers.module';
 import { Booker } from './bookers/entities/booker.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -26,11 +27,12 @@ import { Booker } from './bookers/entities/booker.entity';
           database: database.database,
           entities: [Booker],
           synchronize: true,
-        }
+        };
       },
       inject: [ConfigService],
     }),
-    BookersModule
+    BookersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],

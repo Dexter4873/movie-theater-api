@@ -1,6 +1,7 @@
 export interface GlobalConfig {
   port: number;
   database: DbConfig;
+  jwtSecrets: JwtSecrets;
 }
 
 export interface DbConfig {
@@ -8,4 +9,9 @@ export interface DbConfig {
   password: string;
   port: number;
   database: string;
+}
+
+export interface JwtSecrets {
+  access: string;
+  refresh: string;
 }

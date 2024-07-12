@@ -9,4 +9,8 @@ export const globalConfig = (): GlobalConfig => ({
     port: parseInt(process.env['DB_PORT']) || 3306,
     database: process.env['DB_DATABASE'],
   },
+  jwtSecrets: {
+    access: process.env['JWT_ACCESS'],
+    refresh: process.env['JWT_REFRESH'],
+  }
 });
