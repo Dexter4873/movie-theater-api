@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booker } from '../bookers/entities/booker.entity';
@@ -24,6 +28,7 @@ export class BookingsService {
 
     const schedule = await this.scheduleRepo.findOne({
       where: { id: createBookingDto.schedule },
+      relations: ['auditorium'],
     });
     if (!schedule) throw new NotFoundException('Schedule not found');
 
@@ -33,17 +38,36 @@ export class BookingsService {
     });
     booking.booker = booker;
     booking.schedule = schedule;
+
+    if (booking.seatNumber > schedule.auditorium.seats)
+      throw new BadRequestException('Seat number is invalid');
+
+    const seatOccupied = await this.bookingRepo.exists({
+      where: {
+        schedule: { id: schedule.id },
+        date: booking.date,
+        seatNumber: booking.seatNumber,
+      },
+    });
+    if (seatOccupied) throw new BadRequestException('Seat is already occupied');
+
     booking = await this.bookingRepo.save(booking);
-    return booking;
+    return this.bookingRepo.findOneBy({ id: booking.id });
   }
 
   findAll(bookerId: number) {
-    return this.bookingRepo.find({ where: { booker: { id: bookerId } }})
+    return this.bookingRepo.find({
+      where: { booker: { id: bookerId } },
+      relations: ['schedule', 'booker', 'schedule.auditorium'],
+    });
   }
 
   async findOne(id: number) {
-    const booking = await this.bookingRepo.findOneBy({ id });
-    if (!booking) throw new NotFoundException('Booking not found')
+    const booking = await this.bookingRepo.findOne({
+      where: { id },
+      relations: ['schedule', 'booker', 'schedule.auditorium'],
+    });
+    if (!booking) throw new NotFoundException('Booking not found');
     return booking;
   }
 }
